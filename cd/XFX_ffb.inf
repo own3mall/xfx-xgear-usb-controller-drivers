@@ -1,0 +1,205 @@
+[Version]
+Signature="$CHICAGO$"
+Class=HIDClass
+ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider=%VENDOR%
+DriverVer=05/11/2000, 3.60.136.0
+LayoutFile=layout.inf
+
+
+[SourceDisksNames]
+98="XFX Game Controller","",,\
+
+[SourceDisksFiles]
+ankppage.dll=98
+ankpdfor.dll=98
+usbgame.inf=98
+
+
+[DestinationDirs]
+DefaultDestDir=11
+INF.Copy=17                           ; \windows\system\inf
+
+
+;[ControlFlags]
+;ExcludeFromSelect = *
+
+[ClassInstall]
+Addreg=HIDClassReg
+
+[HIDClassReg]
+HKR,,,,%HID.ClassName%
+;
+;
+HKR,,Icon,,-20
+
+[ClassInstall32]
+Addreg=HIDClassReg32
+
+[HIDClassReg32]
+HKR,,,,%HID.ClassName%
+HKR,,Icon,,-24
+
+
+[Manufacturer]
+%VENDOR%=Standard
+
+[Standard]
+%USB\VID_0e8f&PID_0003.DeviceDesc%=HID_Inst, USB\VID_0e8f&PID_0003
+
+[HID_Inst.NT]
+CopyFiles = USBGAMEPAD.Copy.DLL, HID_Inst.CopyFiles.NT, HID_Inst.CopyFilesDLL.NT
+AddReg    = USBGAMEPAD.AddReg
+
+[HID_Inst.NT.Services]
+;AddService = HidUsb,%SPSVCINST_ASSOCSERVICE%,HID_Service_Inst
+AddService = HidUsb,0x00000002,HID_Service_Inst
+
+;-------------COPY FILE ---------------------------------------------
+[USBGAMEPAD.Copy.DLL]
+XFX_ffb.dll
+XFX_page.dll
+
+; Sub Sections
+[HID_Inst.CopyFiles.NT]
+hidusb.sys
+hidclass.sys
+hidparse.sys
+
+[HID_INST.CopyFilesDLL.NT]
+hid.dll
+
+[HID_Service_Inst]
+DisplayName    = %HID.SvcDesc%
+ServiceType    = 1 ; %SERVICE_KERNEL_DRIVER%
+StartType      = 2 ;%SERVICE_AUTO_START%
+ErrorControl   = 1 ;%SERVICE_ERROR_IGNORE%
+ServiceBinary  = %12%\hidusb.sys
+LoadOrderGroup = extended base
+
+
+;-------------ADD REG ---------------------------------------------
+[USBGAMEPAD.AddReg]
+;;HKR,,DevLoader,0,*ntkern
+;;HKR,,NTMPDriver,0,"hidusb.sys,joyhid.vxd"
+
+HKCR,CLSID\{B4FE8B02-40D0-438A-B4C2-DE4522951071},,,%String2%
+HKCR,CLSID\{B4FE8B02-40D0-438A-B4C2-DE4522951071}\InProcServer32,,,%11%"\XFX_ffb.dll"
+HKCR,CLSID\{B4FE8B02-40D0-438A-B4C2-DE4522951071}\InProcServer32,ThreadingModel,,"Both"
+
+HKCR,CLSID\{D2F1BBC2-CA36-11D5-BFE5-00C026BA473D}\,,,%String3%
+HKCR,CLSID\{D2F1BBC2-CA36-11D5-BFE5-00C026BA473D}\ProgID,,,%USB\vid_0e8f&pid_0003.DeviceDesc%
+HKCR,CLSID\{D2F1BBC2-CA36-11D5-BFE5-00C026BA473D}\InProcHandler32,,,"%11%\gchand.dll"
+HKCR,CLSID\{D2F1BBC2-CA36-11D5-BFE5-00C026BA473D}\InProcServer32,,,"%11%\XFX_page.dll"
+HKCR,CLSID\{D2F1BBC2-CA36-11D5-BFE5-00C026BA473D}\InProcServer32,ThreadingModel,,"Apartment"
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003,OEMName,,%USB\VID_0e8f&PID_0003.DeviceDesc%
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\vid_0e8f&pid_0003,ConfigCLSID,,"{D2F1BBC2-CA36-11D5-BFE5-00C026BA473D}"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003,OEMCallOut,0,joyhid.vxd
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003,OEMData,1,03,00,08,00,08,00,00,00
+
+;----------------------------------------------------------------------------
+;       Add Registry entries for Force Feedback (axis info.)
+;----------------------------------------------------------------------------
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\0,,,"X axis"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\0,Attributes,3,01,81,00,00
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\0,FFAttributes,3,0a,00,00,00,00,01,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\1,,,"Y axis"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\1,Attributes,3,01,81,00,00
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\1,FFAttributes,3,0a,00,00,00,0,01,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\2,,,"I axis"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\2,Attributes,3,01,81,00,00
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\2,FFAttributes,3,0a,00,00,00,00,01,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\3,,,"J axis"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\3,Attributes,3,01,81,00,00
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Axes\3,FFAttributes,3,0a,00,00,00,00,01,00,00
+
+;----------------------------------------------------------------------------
+;       Add Registry entries for Force Feedback (button info.)
+;----------------------------------------------------------------------------
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\0,,,"Button A"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\0,Attributes,3,02,80,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\1,,,"Button B"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\1,Attributes,3,02,80,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\2,,,"Button C"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\2,Attributes,3,02,80,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\3,,,"Button D"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\3,Attributes,3,02,80,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\4,,,"Button E"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\4,Attributes,3,02,80,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\5,,,"Button F"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\5,Attributes,3,02,80,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\6,,,"Button G"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\6,Attributes,3,02,80,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\7,,,"Button H"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\Buttons\7,Attributes,3,02,80,00,00
+
+;----------------------------------------------------------------------------
+;       Add Registry entries for Force Feedback (OEM ForceFeedback setting)
+;----------------------------------------------------------------------------
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback,Attributes,3,00,00,00,00,e8,03,00,00,e8,03,00,00
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback,CLSID,,"{B4FE8B02-40D0-438A-B4C2-DE4522951071}"
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C20-8E33-11D0-9AD0-00A0C9A06E35},,,"Constant Force"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C20-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,00,00,00,00,01,86,00,00,ed,03,00,00,ed,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C21-8E33-11D0-9AD0-00A0C9A06E35},,,"Ramp Force"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C21-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,01,00,00,00,02,86,00,00,ef,03,00,00,ef,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C22-8E33-11D0-9AD0-00A0C9A06E35},,,"Square"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C22-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,02,00,00,00,03,86,00,00,ef,03,00,00,ef,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C23-8E33-11D0-9AD0-00A0C9A06E35},,,"Sine"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C23-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,03,00,00,00,03,86,00,00,ef,03,00,00,ef,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C24-8E33-11D0-9AD0-00A0C9A06E35},,,"Triangle"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C24-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,04,00,00,00,03,86,00,00,ef,03,00,00,ef,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C25-8E33-11D0-9AD0-00A0C9A06E35},,,"SawtoothUp"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C25-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,05,00,00,00,03,86,00,00,ef,03,00,00,ef,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C26-8E33-11D0-9AD0-00A0C9A06E35},,,"SawtoothDown"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C26-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,06,00,00,00,03,86,00,00,ef,03,00,00,ef,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C27-8E33-11D0-9AD0-00A0C9A06E35},,,"Spring"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C27-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,07,00,00,00,04,D8,00,00,6d,03,00,00,6d,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C28-8E33-11D0-9AD0-00A0C9A06E35},,,"Damper"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C28-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,08,00,00,00,04,D8,00,00,6d,03,00,00,6d,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C29-8E33-11D0-9AD0-00A0C9A06E35},,,"Inertia"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C29-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,09,00,00,00,04,d8,00,00,6d,03,00,00,6d,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C2A-8E33-11D0-9AD0-00A0C9A06E35},,,"Friction"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C2A-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,0a,00,00,00,04,d8,00,00,6d,03,00,00,6d,03,00,00,30,00,00,00
+
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C2B-8E33-11D0-9AD0-00A0C9A06E35},,,"Custom Force"
+HKLM,System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_0e8f&PID_0003\OEMForceFeedback\Effects\{13541C2B-8E33-11D0-9AD0-00A0C9A06E35},Attributes,3,00,01,00,00,05,86,00,00,ef,03,00,00,EF,03,00,00,30,00,00,00
+
+
+
+[Strings]
+VENDOR = "XFX"
+String2="XFX Game Controller"
+String3="XFX Game Controller"
+USB\VID_0e8f&PID_0003.DeviceDesc = "XFX Game Controller"
+HID_DEVICE_SYSTEM_GAME = "HID-compliant game controller"
+HID.ClassName         = "Human Input Devices (HID)"
+HID.SvcDesc           = "Microsoft HID Class Driver"
+
+
+SPSVCINST_ASSOCSERVICE= 0x00000003
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START  = 3
+SERVICE_ERROR_IGNORE  = 0
+REG_EXPAND_SZ         = 0x00030000

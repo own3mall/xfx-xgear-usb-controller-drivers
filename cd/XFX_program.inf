@@ -1,0 +1,96 @@
+;/*++
+;
+;Copyright (c) 1990-1999 Microsoft Corporation All rights Reserved
+;
+;Module Name:
+;
+;    filter.INF
+;
+;Abstract:
+;    INF file for installing toaster device drivers
+;--*/
+[Version]
+Signature="$WINDOWS NT$"
+Class=HIDClass
+ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider=%MSFT%
+DriverVer=11/10/2004,5.00.2064
+CatalogFile=XFX_program.cat
+LayoutFile=layout.inf
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+;*****************************************
+; Toaster Device Filter Install Section
+;*****************************************
+
+[Manufacturer]
+%StdMfg%=Standard
+
+[Standard]
+; DisplayName       		Section           DeviceId
+; -----------       		-------           --------
+%ToasterFilter.DeviceDesc%=ToasterFilter, HID\Vid_0e8f&Pid_0003
+
+;=====================================================================
+[ToasterFilter.NT]  
+;=============== Get the standard stuff from Toaster.inf==============
+CopyFiles=ToasterFilter.NT.Copy
+AddReg=ToasterFilter.NT.AddReg
+
+[ToasterFilter.NT.Copy]
+XFX_program.sys
+
+[ToasterFilter.NT.AddReg]                            
+; Add registry entries here
+
+[ToasterFilter.NT.HW]
+;================ Add our own stuff
+AddReg = ToasterFilter.NT.HW.AddReg
+
+;================ Add in the standard stuff provided by Toaster
+;Include = toaster.inf
+;Needs = Toaster_Device.NT.HW
+
+[ToasterFilter.NT.HW.AddReg]  
+HKR,,"UpperFilters",0x00010000,"XFX_program"
+
+;*****************************************
+; Toaster Device Filter Service Section
+;*****************************************
+
+[ToasterFilter.NT.Services]
+;Do not specify SPSVCINST_ASSOCSERVICE on filter drivers. 
+AddService = XFX_program,, filter_Service_Inst 
+
+
+[filter_Service_Inst]
+DisplayName    = %filter.SvcDesc%                            
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\XFX_program.sys                            
+
+;*************************
+; Source file information
+;*************************
+
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles]
+XFX_program.sys  = 1,,
+
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+MSFT = "XFX"
+StdMfg = "(Standard system devices)"
+ClassName = "XFX"
+
+DiskId1 = "XFX Executioner Game Controller Installation Disk #1"
+ToasterFilter.DeviceDesc = "XFX Game Controller"
+filter.SvcDesc = "XFX Game Controller"
+
